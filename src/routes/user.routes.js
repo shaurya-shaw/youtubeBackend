@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   loginUser,
   logoutUser,
+  refreshAccessToken,
   registerUser,
 } from "../controllers/user.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
@@ -29,6 +30,8 @@ router.route("/login").post(
   upload.none(), // This will parse form-data without expecting files
   loginUser
 );
+
+router.route("/refreshAccessToken").post(refreshAccessToken);
 
 //secured routes
 
