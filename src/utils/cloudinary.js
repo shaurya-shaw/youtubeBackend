@@ -1,6 +1,7 @@
 import { configDotenv } from "dotenv";
 import { v2 as cloudinary } from "cloudinary";
 import fs from "fs";
+import { ApiError } from "./ApiError.js";
 
 configDotenv({
   path: "./.env",
@@ -30,4 +31,22 @@ const uploadOnCloudinary = async (localFilePath) => {
   }
 };
 
-export { uploadOnCloudinary };
+const deleteOnCloudinary = async (cloudFilePath) => {
+  try {
+    if (!cloudFilePath) {
+      throw new ApiError(404, "wrong file path name");
+    }
+
+    await cloudinary.uploader.destroy(cloudFilePath, {
+      resource_type: "image",
+    });
+
+    console.log("file is successfully deleted from cloudinary");
+  } catch (error) {
+    console.log(error);
+
+    throw new ApiError(500, "not able to upload on cloudinary");
+  }
+};
+
+export { uploadOnCloudinary, deleteOnCloudinary };
